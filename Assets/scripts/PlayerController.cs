@@ -4,21 +4,26 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 
 
-public class PlayerController : MonoBehaviour 
+public class PlayerController : MonoBehaviour
 {
+    //Variables related to player character movement
+    public InputAction MoveAction; 
+    Vector2 move;
+    Rigidbody2D rigidbody2d;
+    public float speed = 3.0f;
 
-    // Called once when the object is initialized
-    public InputAction MoveAction;
     void Start()
     {
-      
         MoveAction.Enable();
+        rigidbody2d = GetComponent<Rigidbody2D>(); 
     }
 
-    // Called once per frame
     void Update()
     {
-      
+        // Read input movement
+        move = MoveAction.ReadValue<Vector2>();
+        Debug.Log(move);
+
         float horizontal = 0.0f;
         if (Keyboard.current.leftArrowKey.isPressed)
         {
@@ -42,10 +47,16 @@ public class PlayerController : MonoBehaviour
         }
         Debug.Log(vertical);
 
-        Vector2 move = MoveAction.ReadValue<Vector2>();
-        Debug.Log(move);
+        // Move the transform position
         Vector2 position = (Vector2)transform.position + move * 3.5f * Time.deltaTime;
+        Debug.Log(move);
         transform.position = position;
-
     }
-}
+
+    void FixedUpdate()
+    {
+        // Move using Rigidbody2D physics
+        Vector2 position = rigidbody2d.position + move * 3.0f * Time.deltaTime;
+        rigidbody2d.MovePosition(position);
+    }
+} 
