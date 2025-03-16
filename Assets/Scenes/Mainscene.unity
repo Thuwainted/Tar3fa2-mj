@@ -3135,6 +3135,10 @@ PrefabInstance:
       propertyPath: speed
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4235286783188936294, guid: b644b8aea740ea14698137dc5470da5a, type: 3}
+      propertyPath: projectilePrefab
+      value: 
+      objectReference: {fileID: 5862591868201823202, guid: f569dfd449e7be74c88f938a9c42b325, type: 3}
     - target: {fileID: 6901659733342818472, guid: b644b8aea740ea14698137dc5470da5a, type: 3}
       propertyPath: m_Constraints
       value: 4
