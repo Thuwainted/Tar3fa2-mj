@@ -2,27 +2,51 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 
 public class PlayerController : MonoBehaviour
 {
-    //Variables related to player character movement
-    public InputAction MoveAction; 
+    // Variables related to player character movement
+    public InputAction MoveAction;
     Vector2 move;
     Rigidbody2D rigidbody2d;
     public float speed = 3.0f;
 
+    //player life
+    public int maxHealth = 5;
+    int currentHealth;
+    public int health { get { return currentHealth; } }
+
+    // Variables related to temporary invincibility
+    public float timeInvincible = 2.0f;
+    bool isInvincible;
+    float damageCooldown;
+
+
     void Start()
     {
         MoveAction.Enable();
-        rigidbody2d = GetComponent<Rigidbody2D>(); 
+        rigidbody2d = GetComponent<Rigidbody2D>();
+
+        currentHealth = maxHealth;
     }
 
     void Update()
     {
         // Read input movement
         move = MoveAction.ReadValue<Vector2>();
-        Debug.Log(move);
+
+
+        if (isInvincible)
+        {
+            damageCooldown -= Time.deltaTime;
+            if (damageCooldown < 0)
+            {
+                isInvincible = false;
+            }
+        }
+    }
 
         float horizontal = 0.0f;
         if (Keyboard.current.leftArrowKey.isPressed)
@@ -34,6 +58,7 @@ public class PlayerController : MonoBehaviour
             horizontal = 1.0f;
         }
         Debug.Log(horizontal);
+}
 
 
         float vertical = 0.0f;
@@ -59,4 +84,9 @@ public class PlayerController : MonoBehaviour
         Vector2 position = rigidbody2d.position + move * 3.0f * Time.deltaTime;
         rigidbody2d.MovePosition(position);
     }
-} 
+    public void ChangeHealth(int amount)
+    {
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        Debug.Log(currentHealth + "/" + maxHealth);
+    }
+}
